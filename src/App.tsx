@@ -1,13 +1,37 @@
-import { useEffect } from "react";
-import { api } from "./services/api";
+import { Box, Button, Container, Typography } from "@mui/material";
+import { useLogin } from "./features/auth/hooks/useLogin";
 
 export default function App() {
-  useEffect(() => {
-    api
-      .get("/cards", { params: { rpp: 10, page: 1 } })
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err));
-  }, []);
+  const { mutate, isPending } = useLogin();
 
-  return <h1>Cards Marketplace</h1>;
+  const handleLogin = () => {
+    mutate({
+      email: "example@test.com",
+      password: "123456",
+    });
+  };
+
+  return (
+    <Container maxWidth="sm">
+      <Box
+        height="100vh"
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        gap={3}
+      >
+        <Typography variant="h4">Cards Marketplace</Typography>
+
+        <Button
+          variant="contained"
+          fullWidth
+          onClick={handleLogin}
+          disabled={isPending}
+        >
+          {isPending ? "Entrando..." : "Login teste"}
+        </Button>
+      </Box>
+    </Container>
+  );
 }
